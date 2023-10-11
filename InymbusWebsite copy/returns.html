@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Big Words Demo</title>
+	<link rel="stylesheet" type="text/css" href="deductions.css">
+	<nav class="navbar">
+<div class="navbar-left">
+	<img src="logo.png" alt="Logo">
+</div>
+<div class="navbar-middle">
+	<ul class="navbar-menu">
+		<li class="navbar-item">
+			<a href="homeLoggedIn.html">Home</a>
+		</li>
+		<li class="navbar-item">
+			<a href="#">Products</a>
+			<ul class="dropdown-menu">
+				<li><a href="deductions.html">Deductionsxchange</a></li>
+				<li><a href="chargebacks.html">Chargebacks</a></li>
+				<li><a href="returns.html">Returns Variance</a></li>
+				<li><a href="freight.html">Freight Claim Automation</a></li>
+
+			</ul>
+		</li>
+		<li class="navbar-item">
+			<a href="#">Resources</a>
+			<ul class="dropdown-menu">
+				<li><a href="whitepapers.html">White Papers</a></li>
+				<li><a href="blog.html">Blog</a></li>
+			</ul>
+		</li>
+		<li class="navbar-item">
+			<a href="cart.html">Cart</a>
+
+		</li>
+		<li class="navbar-item">
+			<a href="">About Us</a>
+			<ul class="dropdown-menu">
+				<li><a href="outleaders.html">About us</a></li>
+				<li><a href="customers.html">Customer Testimonials</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div class="navbar-right">
+
+	<li><button id = "SignOut" >Sign Out</button></li>
+	<li><a href ="updatingUserProfile.html" >Update user profile</a></li>
+
+
+</div>
+</nav>
+</head>
+
+<body>
+  <div class="product-container">
+  <div class="product-details">
+    <h2>Returns Variance - $140</h2>
+		<button id="CartButton"class = "add-to-cart">Cart Button</button>
+    <div class="product-actions">
+      <button class="collapsible">The Problem</button>
+  <div class="content">
+    <p>Claims from retailers and shippers are becoming an increasing issue for consumer packaged goods manufacturers and distributors. As retailers get more automated and sophisticated, they are able to take rapid-fire claims, such as shortages, chargebacks, returns, and pricing, against manufacturers creating enormous paperwork and processing problems, and cutting into hard won revenue.</p>
+  </div>
+  <button class="collapsible">The Ideal Solution</button>
+<div class="content">
+<p>iNymbus provides an automation of accounts receivable solution that eliminates manual retailer and shipper claims processing for manufacturers, suppliers, and distributors. iNymbus uses cloud robotic process automation and AI to automatically read retailer portals, gathering and preparing necessary claims paperwork, packaging claims, and uploading the claim packets to vendor portals.</p>
+</div>
+<button class="collapsible">Top Features</button>
+<div class="content">
+<p>&#8226; Laser-focused on retailer and shipper claims, with an overarching goal of processing them quickly and efficiently with limited human interaction.<br>
+
+&#8226; Cloud data storage combined with robotic automation applies the latest technology and thought leadership to retail deductions and chargeback processing problems.</p>
+</div>
+    </div>
+  </div>
+  <div class="product-image">
+    <img src="returns.png" alt="Product Image">
+  </div>
+</div>
+<div class="product" data-product-id="product3">
+		<h2>Product 1</h2>
+		<p>Description of the product...</p>
+		<div class="rating">
+				<div class="stars">
+						<span class="star">&#9733;</span>
+						<span class="star">&#9733;</span>
+						<span class="star">&#9733;</span>
+						<span class="star">&#9733;</span>
+						<span class="star">&#9733;</span>
+				</div>
+				<button class="review-button">Write a Review</button>
+		</div>
+		<div class="reviews">
+				<!-- Display reviews here -->
+		</div>
+</div>
+</body>
+<script type="Module">
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  });
+}
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+import { getFirestore, collection, doc, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyB9Zeozd3NMXBemFWLOnLYAOLLJdSeszXY",
+  authDomain: "cs-sign-up.firebaseapp.com",
+  databaseURL: "https://cs-sign-up-default-rtdb.firebaseio.com",
+  projectId: "cs-sign-up",
+  storageBucket: "cs-sign-up.appspot.com",
+  messagingSenderId: "930023154030",
+  appId: "1:930023154030:web:babc491f3e46f7095ea17f",
+  measurementId: "G-V07C9L6HNC"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+
+async function addToCart(ProductID, Name, Price) {
+  try {
+    const user = auth.currentUser;
+    const userId = user.uid;
+
+    const userDocRef = doc(db, 'users', userId);
+
+    const cartCollectionRef = collection(userDocRef, 'cart');
+
+    await addDoc(cartCollectionRef, {
+      ProductID: ProductID,
+      Name: Name,
+      Price: Price
+    });
+
+    console.log('Item added to cart successfully!');
+  } catch (error) {
+    console.error('Error adding item to cart:', error);
+  }
+}
+
+CartButton.addEventListener('click',(e)=>{
+	addToCart("product2","returns","140")
+});
+
+
+function saveReview(productId, rating, reviewText) {
+		const reviewsCollection = collection(db, "product_reviews");
+
+		addDoc(reviewsCollection, {
+				productId: productId,
+				rating: rating,
+				reviewText: reviewText
+		})
+		.then(() => {
+				console.log("Review added successfully.");
+		})
+		.catch((error) => {
+				console.error("Error adding review: ", error);
+		});
+}
+
+const reviewButtons = document.querySelectorAll(".review-button");
+for (const button of reviewButtons) {
+		button.addEventListener("click", () => {
+				const productId = button.parentElement.parentElement.dataset.productId;
+				const rating = parseInt(prompt("Enter your rating (1-5):"));
+				const reviewText = prompt("Enter your review:");
+
+				if (productId && !isNaN(rating) && rating >= 1 && rating <= 5 && reviewText) {
+						saveReview(productId, rating, reviewText);
+				} else {
+						console.log("Invalid input");
+				}
+		});
+}
+
+const products = document.querySelectorAll(".product");
+for (const product of products) {
+		const productId = product.dataset.productId;
+		const reviewsDiv = product.querySelector(".reviews");
+
+		const reviewsCollection = collection(db, "product_reviews");
+		const query = where("productId", "==", productId);
+
+		getDocs(query)
+				.then(querySnapshot => {
+						reviewsDiv.innerHTML = ""; // Clear previous reviews
+						querySnapshot.forEach(doc => {
+								const review = doc.data();
+								const reviewElement = document.createElement("div");
+								reviewElement.innerHTML = `
+										<p>Rating: ${review.rating}</p>
+										<p>${review.reviewText}</p>
+								`;
+								reviewsDiv.appendChild(reviewElement);
+						});
+				})
+				.catch(error => {
+						console.error("Error fetching reviews: ", error);
+				});
+}
+</script>
+</html>

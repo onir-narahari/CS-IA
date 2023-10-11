@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .star {
+            font-size: 1.5rem;
+            color: #FFD700;
+            cursor: pointer;
+        }
+
+        .review-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .reviews {
+            margin-top: 20px;
+            border-top: 1px solid #DDD;
+            padding-top: 10px;
+        }
+    </style>
+    <title>Product Reviews</title>
+</head>
+<body>
+    <div class="product" data-product-id="product1">
+        <h2>Product 1</h2>
+        <p>Description of the product...</p>
+        <div class="rating">
+            <div class="stars">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+            </div>
+            <button class="review-button">Write a Review</button>
+        </div>
+        <div class="reviews">
+            <!-- Display reviews here -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, where } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyB9Zeozd3NMXBemFWLOnLYAOLLJdSeszXY",
+            authDomain: "cs-sign-up.firebaseapp.com",
+            databaseURL: "https://cs-sign-up-default-rtdb.firebaseio.com",
+            projectId: "cs-sign-up",
+            storageBucket: "cs-sign-up.appspot.com",
+            messagingSenderId: "930023154030",
+            appId: "1:930023154030:web:babc491f3e46f7095ea17f",
+            measurementId: "G-V07C9L6HNC"
+
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function saveReview(productId, rating, reviewText) {
+            const reviewsCollection = collection(db, "product_reviews");
+
+            addDoc(reviewsCollection, {
+                productId: productId,
+                rating: rating,
+                reviewText: reviewText
+            })
+            .then(() => {
+                console.log("Review added successfully.");
+            })
+            .catch((error) => {
+                console.error("Error adding review: ", error);
+            });
+        }
+
+        const reviewButtons = document.querySelectorAll(".review-button");
+        for (const button of reviewButtons) {
+            button.addEventListener("click", () => {
+                const productId = button.parentElement.parentElement.dataset.productId;
+                const rating = parseInt(prompt("Enter your rating (1-5):"));
+                const reviewText = prompt("Enter your review:");
+
+                if (productId && !isNaN(rating) && rating >= 1 && rating <= 5 && reviewText) {
+                    saveReview(productId, rating, reviewText);
+                } else {
+                    console.log("Invalid input");
+                }
+            });
+        }
+
+        const products = document.querySelectorAll(".product");
+        for (const product of products) {
+            const productId = product.dataset.productId;
+            const reviewsDiv = product.querySelector(".reviews");
+
+            const reviewsCollection = collection(db, "product_reviews");
+            const query = where("productId", "==", productId);
+
+            getDocs(query)
+                .then(querySnapshot => {
+                    reviewsDiv.innerHTML = ""; // Clear previous reviews
+                    querySnapshot.forEach(doc => {
+                        const review = doc.data();
+                        const reviewElement = document.createElement("div");
+                        reviewElement.innerHTML = `
+                            <p>Rating: ${review.rating}</p>
+                            <p>${review.reviewText}</p>
+                        `;
+                        reviewsDiv.appendChild(reviewElement);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching reviews: ", error);
+                });
+        }
+    </script>
+</body>
+</html>

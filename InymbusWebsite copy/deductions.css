@@ -1,0 +1,185 @@
+
+.navbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  height: 80px;
+  padding: 0 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-left img {
+  height: 50px;
+  float: left;
+}
+
+.navbar-right img {
+  height: 50px;
+  float: right;
+}
+
+.navbar-middle {
+  flex: 1;
+}
+
+.navbar-menu {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  position: relative;
+  margin: 0 20px;
+}
+
+.navbar-item a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  min-width: 160px;
+  padding: 5px 0;
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-item:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li {
+  display: block;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 5px 20px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f2f2f2;
+}
+
+.product-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width:  2000px;
+  margin-top: 50px;
+}
+
+.product-details {
+  flex-basis: 50%;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.product-details h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  font-family: 'Lato', sans-serif;
+}
+
+.add-to-cart {
+  display: block;
+  width: 20%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: #FF5722;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left:170px;
+  margin-bottom: 30px;
+}
+
+.product-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  margin-left:170px;
+
+}
+
+.product-actions button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #eee;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+
+.product-actions button:hover {
+  background-color: #333;
+  color: white;
+}
+
+.product-image {
+  flex-basis: 50%;
+  float:left;
+  position: relative;
+}
+.product-image img {
+  float: right;
+  width: 90%;
+}
+.collapsible {
+  background-color: white;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  font-family: 'Lato', sans-serif;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: orange;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: lightgrey;
+}

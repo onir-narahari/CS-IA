@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cart</title>
+  <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js"></script>
+  <link rel="stylesheet" href="home.css">
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <img src="logo.png" alt="Logo">
+    </div>
+    <div class="navbar-middle">
+      <ul class="navbar-menu">
+        <li class="navbar-item">
+          <a href="homeLoggedIn.html">Home</a>
+        </li>
+        <li class="navbar-item">
+          <a href="#">Products</a>
+          <ul class="dropdown-menu">
+            <li><a href="deductions.html">Deductionsxchange</a></li>
+            <li><a href="chargebacks.html">Chargebacks</a></li>
+            <li><a href="returns.html">Returns Variance</a></li>
+            <li><a href="freight.html">Freight Claim Automation</a></li>
+          </ul>
+        </li>
+        <li class="navbar-item">
+          <a href="#">Resources</a>
+          <ul class="dropdown-menu">
+            <li><a href="whitepapers.html">White Papers</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </li>
+        <li class="navbar-item">
+          <a href="cart.html">Cart</a>
+        </li>
+        <li class="navbar-item">
+          <a href="">About Us</a>
+          <ul class="dropdown-menu">
+            <li><a href="outleaders.html">About us</a></li>
+            <li><a href="customers.html">Customer Testimonials</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="navbar-right">
+      <a><button id="SignOut">Sign Out</button></a>
+      <a href="updatingUserProfile.html">Update/Delete Profile</a>
+    </div>
+  </nav>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      text-align: left;
+      padding: 10px;
+    }
+
+    td {
+      padding: 10px;
+    }
+
+    .remove-button {
+      background-color: #ff7f7f;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .remove-button:hover {
+      background-color: #ff5555;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+    .checkout-section {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .subtotal-label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .subtotal-value {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .checkout-button {
+      background-color: #ff7f7f;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .checkout-button:hover {
+      background-color: #ff5555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cart Items</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Product ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="cart-items">
+    </tbody>
+    <div class="checkout-section">
+    <span>Subtotal:</span>
+    <span id="subtotal-amount"></span>
+  </div>
+  <button id = "checkout"class="checkout-button">Checkout</button>
+  </table>
+  <script type="module">
+
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+     import { getFirestore, collection, query, getDocs, deleteDoc, doc, where } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB9Zeozd3NMXBemFWLOnLYAOLLJdSeszXY",
+      authDomain: "cs-sign-up.firebaseapp.com",
+      databaseURL: "https://cs-sign-up-default-rtdb.firebaseio.com",
+      projectId: "cs-sign-up",
+      storageBucket: "cs-sign-up.appspot.com",
+      messagingSenderId: "930023154030",
+      appId: "1:930023154030:web:babc491f3e46f7095ea17f",
+      measurementId: "G-V07C9L6HNC"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    async function getCartItems() {
+      try {
+        if (!auth.currentUser) {
+          throw new Error('User is not authenticated.');
+        }
+
+        const userId = auth.currentUser.uid;
+        const userDocRef = collection(db, 'users', userId, 'cart');
+        const querySnapshot = await getDocs(query(userDocRef));
+
+        const cartItems = [];
+        querySnapshot.forEach((doc) => {
+          const itemData = doc.data();
+          cartItems.push({
+            id: doc.id,
+            ProductID: itemData.ProductID,
+            Name: itemData.Name,
+            Price: itemData.Price
+          });
+        });
+
+        return cartItems;
+      } catch (error) {
+        console.error('Error retrieving cart items:', error);
+        return [];
+      }
+    }
+
+
+
+    function removeItemFromCart(itemId) {
+    try {
+      if (!auth.currentUser) {
+        throw new Error('User is not authenticated.');
+      }
+
+      const userId = auth.currentUser.uid;
+      const cartItemRef = doc(db, 'users', userId, 'cart', itemId);
+
+      deleteDoc(cartItemRef)
+        .then(() => {
+          console.log('Item removed from cart successfully!');
+          displayCartItems();
+        })
+        .catch((error) => {
+          console.error('Error removing item from cart:', error);
+        });
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+    }
+  }
+
+   async function displayCartItems() {
+     try {
+       const cartItems = await getCartItems();
+       const cartItemsContainer = document.getElementById('cart-items');
+       cartItemsContainer.innerHTML = '';
+
+       cartItems.forEach((item) => {
+         const row = document.createElement('tr');
+         const productIdCell = document.createElement('td');
+         const nameCell = document.createElement('td');
+         const priceCell = document.createElement('td');
+         const actionsCell = document.createElement('td');
+         const removeButton = document.createElement('button');
+
+         productIdCell.textContent = item.ProductID;
+         nameCell.textContent = item.Name;
+         priceCell.textContent = item.Price;
+         removeButton.textContent = 'Remove';
+
+         removeButton.addEventListener('click', () => {
+           removeItemFromCart(item.id);
+         });
+
+         actionsCell.appendChild(removeButton);
+         row.appendChild(productIdCell);
+         row.appendChild(nameCell);
+         row.appendChild(priceCell);
+         row.appendChild(actionsCell);
+
+         cartItemsContainer.appendChild(row);
+         const subtotal = cartItems.reduce((total, item) => total + parseFloat(item.Price), 0);
+   const subtotalAmount = document.getElementById('subtotal-amount');
+   subtotalAmount.textContent = subtotal.toFixed(2);
+       });
+     } catch (error) {
+       console.error('Error displaying cart items:', error);
+     }
+   }
+
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    displayCartItems();
+  }
+});
+
+  </script>
+</body>
+</html>

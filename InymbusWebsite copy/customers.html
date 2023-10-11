@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Customer Testimonials</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  margin: 0;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.testimonial {
+  display: flex;
+  margin-bottom: 50px;
+}
+
+.testimonial img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+blockquote p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+cite {
+  font-size: 16px;
+  font-style: italic;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  height: 80px;
+  padding: 0 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-left img {
+  height: 50px;
+  float: left;
+}
+
+.navbar-right img {
+  height: 50px;
+  float: right;
+}
+
+.navbar-middle {
+  flex: 1;
+}
+
+.navbar-menu {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  position: relative;
+  margin: 0 20px;
+}
+
+.navbar-item a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  min-width: 160px;
+  padding: 5px 0;
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-item:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li {
+  display: block;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 5px 20px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f2f2f2;
+}
+    </style>
+    <nav class="navbar">
+  <div class="navbar-left">
+    <img src="logo.png" alt="Logo">
+  </div>
+  <div class="navbar-middle">
+    <ul class="navbar-menu">
+      <li class="navbar-item">
+        <a href="home.html">Home</a>
+      </li>
+      <li class="navbar-item">
+        <a href="#">Products</a>
+        <ul class="dropdown-menu">
+          <li><a href="deductions.html">Deductionsxchange</a></li>
+          <li><a href="chargebacks.html">Chargebacks</a></li>
+          <li><a href="returns.html">Returns Variance</a></li>
+          <li><a href="freight.html">Freight Claim Automation</a></li>
+
+        </ul>
+      </li>
+      <li class="navbar-item">
+        <a href="#">Resources</a>
+        <ul class="dropdown-menu">
+          <li><a href="whitepapers.html">White Papers</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </li>
+      <li class="navbar-item">
+        <a href="">About Us</a>
+        <ul class="dropdown-menu">
+          <li><a href="outleaders.html">About us</a></li>
+          <li><a href="customers.html">Customer Testimonials</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class="navbar-right">
+    <a href="login.html">Sign Up</a>
+  </div>
+</nav>
+  </head>
+  <body>
+    <header>
+      <h1>Customer Testimonials</h1>
+    </header>
+    <main>
+      <section class="testimonial">
+        <img src="testimonial1.jpg" alt="Testimonial 1">
+        <blockquote>
+          <p>"I've been using iNymbus for the past year, and I couldn't be happier with their service. They're always available to answer my questions, and they make sure that I'm getting the most out of their product."</p>
+          <cite>John Doe</cite>
+        </blockquote>
+      </section>
+      <section class="testimonial">
+        <img src="testimonial2.jpg" alt="Testimonial 2">
+        <blockquote>
+          <p>"I had an issue with iNymbus's product, but their customer support team was incredibly helpful and resolved the issue quickly. I'm impressed by their dedication to their customers."</p>
+          <cite>Jane Smith</cite>
+        </blockquote>
+      </section>
+      <section class="testimonial">
+        <img src="testimonial3.jpg" alt="Testimonial 3">
+        <blockquote>
+          <p>iNymbus's product has exceeded my expectations. It's easy to use and has helped me streamline my business operations. I highly recommend it."</p>
+          <cite>Bob Johnson</cite>
+        </blockquote>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<script src = "config.js"></script>
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+button:hover {
+  opacity:1;
+}
+
+.cancelbtn {
+  padding: 14px 20px;
+  background-color: #f44336;
+}
+
+.cancelbtn, .signupbtn {
+  float: left;
+  width: 50%;
+}
+
+.loginForm {
+  padding: 16px;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+@media screen and (max-width: 300px) {
+  .cancelbtn, .signupbtn {
+     width: 100%;
+  }
+}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <nav class="navbar">
+<div class="navbar-left">
+  <img src="logo.png" alt="Logo">
+</div>
+<div class="navbar-middle">
+  <ul class="navbar-menu">
+    <li class="navbar-item">
+      <a href="home.html">Home</a>
+    </li>
+    <li class="navbar-item">
+      <a href="#">Products</a>
+      <ul class="dropdown-menu">
+        <li><a >Deductionsxchange</a></li>
+        <li><a >Chargebacks</a></li>
+        <li><a >Returns Variance</a></li>
+        <li><a >Freight Claim Automation</a></li>
+
+      </ul>
+    </li>
+    <li class="navbar-item">
+      <a href="#">Cart</a>
+    </li>
+    <li class="navbar-item">
+      <a href="#">Resources</a>
+      <ul class="dropdown-menu">
+        <li><a href="whitepapers.html">White Papers</a></li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+    </li>
+    <li class="navbar-item">
+      <a href="">About Us</a>
+      <ul class="dropdown-menu">
+        <li><a href="outleaders.html">About us</a></li>
+        <li><a href="customers.html">Customer Testimonials</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="navbar-right">
+  <a href="login.html">Sign Up</a>
+</div>
+</nav>
+
+
+
+
+
+
+</head>
+<body>
+
+
+  <div class="loginForm">
+    <h1>Admin log in</h1>
+    <hr>
+
+    <label for="email"><b>Email</b></label>
+    <input id = "email" type="text" placeholder="Enter Email" name="email" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input id  = "password" type="password" placeholder="Enter Password" name="psw" required>
+
+
+
+
+
+
+    <div class="clearfix">
+      <button id = "login" class="cancelbtn">Login</button>
+
+    </div>
+  </div>
+
+<script type="module">
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB9Zeozd3NMXBemFWLOnLYAOLLJdSeszXY",
+    authDomain: "cs-sign-up.firebaseapp.com",
+    databaseURL: "https://cs-sign-up-default-rtdb.firebaseio.com",
+    projectId: "cs-sign-up",
+    storageBucket: "cs-sign-up.appspot.com",
+    messagingSenderId: "930023154030",
+    appId: "1:930023154030:web:babc491f3e46f7095ea17f",
+    measurementId: "G-V07C9L6HNC"
+  };
+
+
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+  import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+
+
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+  const auth = getAuth();
+  var email = document.getElementById('email').value;
+  var password = document.getElementById('password').value;
+  var username = document.getElementById('username').value;
+
+
+
+    login.addEventListener('click',(e)=>{
+
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+
+          const dt = new Date();
+           update(ref(database, 'users/' + user.uid),{
+            last_login: dt,
+          })
+
+           alert('User logged in!');
+           location.href = 'admin.html'
+
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+
+          alert(errorMessage);
+
+    }}});
+
+</script>
+</body>
+</html>
